@@ -3,6 +3,8 @@ A example game made with Unity where the map is a procedurally generated maze.
 
 Requires unity Standard Assets and Unity Engine. 
 
+* Demo: http://proceduralmaze.azurewebsites.net
+
 ## Example
 The function MazeGenerator.Generate() returns a char[,] of the given maze sizes (from class constructor). 
 The maze is mostly random and looks like this: 
