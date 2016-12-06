@@ -9,7 +9,9 @@ public class MazeGeneratorBehaviour : MonoBehaviour
     public int StageWidth = 51;
     public int StageHeight = 51;
     public int NumberRoomTries = 30;
+    public int RoomExtraSize = 0;
     public int ExtraConnectorChance = 20;
+    public int WindingPercent = 0;
     public bool RemoveDeadEnds = true;
 
     public GameObject Wall;
@@ -26,7 +28,7 @@ public class MazeGeneratorBehaviour : MonoBehaviour
         if (StageHeight % 2 == 0)
             StageHeight++;
 
-        mz = new MazeGenerator(StageWidth, StageHeight, NumberRoomTries, ExtraConnectorChance, RemoveDeadEnds);
+        mz = new MazeGenerator(StageWidth, StageHeight, NumberRoomTries, RoomExtraSize, ExtraConnectorChance, WindingPercent, RemoveDeadEnds);
         maze = mz.Generate();
         mz.PrintDebug();
 

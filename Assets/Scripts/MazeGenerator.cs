@@ -48,18 +48,20 @@ public class MazeGenerator
     /// <summary>
     /// Increasing this allows rooms to be larger
     /// </summary>
-    public int RoomExtraSize = 0;
+    public int RoomExtraSize { get; set; }
 
-    public int WindingPercent = 0;
+    public int WindingPercent { get; set; }
 
     private List<Rect> _rooms;
 
-    public MazeGenerator(int stageWidth = 51, int stageHeight = 51, int numberRoomTries = 30, int extraConnectorChance = 20, bool removeDeadEnds = true)
+    public MazeGenerator(int stageWidth = 51, int stageHeight = 51, int numberRoomTries = 30, int roomExtraSize=0, int extraConnectorChance = 20, int windingPercent = 0, bool removeDeadEnds = true)
     {
         StageHeight = stageHeight;
         StageWidth = stageWidth;
         NumberRoomTries = numberRoomTries;
+        RoomExtraSize = roomExtraSize;
         RemoveDeadEnds = removeDeadEnds;
+        WindingPercent = windingPercent;
         ExtraConnectorChance = extraConnectorChance;
         Maze = new char[stageWidth, stageHeight];
         _rooms = new List<Rect>();
@@ -175,7 +177,7 @@ public class MazeGenerator
                 // Based on how "windy" passages are, try to prefer carving in the
                 // same direction.
                 Vector2 dir;
-                if (unmadeCells.Contains(lastDirection) && Random.Range(0, 100) > WindingPercent)
+                if (unmadeCells.Contains(lastDirection) && Random.Range(0, 100) < 100 - WindingPercent)
                 {
                     dir = lastDirection;
                 }
