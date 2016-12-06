@@ -1,5 +1,5 @@
 #Procedural Maze
-A simple sandbox game made with Unity where the map is procedurally generated.
+A example game made with Unity where the map is a procedurally generated maze.
 
 Requires unity Standard Assets and Unity Engine. 
 
