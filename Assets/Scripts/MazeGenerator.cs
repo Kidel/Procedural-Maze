@@ -37,6 +37,8 @@ public class MazeGenerator
 
     public int NumberRoomTries { get; set; }
 
+    public int NumberOfEnemies { get; set; }
+
     public bool RemoveDeadEnds { get; set; }
 
     /// <summary>
@@ -54,7 +56,7 @@ public class MazeGenerator
 
     private List<Rect> _rooms;
 
-    public MazeGenerator(int stageWidth = 51, int stageHeight = 51, int numberRoomTries = 30, int roomExtraSize=0, int extraConnectorChance = 20, int windingPercent = 0, bool removeDeadEnds = true)
+    public MazeGenerator(int stageWidth = 51, int stageHeight = 51, int numberRoomTries = 30, int roomExtraSize=0, int extraConnectorChance = 20, int windingPercent = 0, bool removeDeadEnds = true, int numberOfEnemies = 10)
     {
         StageHeight = stageHeight;
         StageWidth = stageWidth;
@@ -62,6 +64,7 @@ public class MazeGenerator
         RoomExtraSize = roomExtraSize;
         RemoveDeadEnds = removeDeadEnds;
         WindingPercent = windingPercent;
+        NumberOfEnemies = numberOfEnemies;
         ExtraConnectorChance = extraConnectorChance;
         Maze = new char[stageWidth, stageHeight];
         _rooms = new List<Rect>();
@@ -93,6 +96,7 @@ public class MazeGenerator
             _removeDeadEnds();
 
         _addPlayer();
+        _addEnemies();
 
         return Maze;
     }
@@ -310,7 +314,26 @@ public class MazeGenerator
         Vector2 pos = new Vector2(Random.Range(randomRoom.x + 2, randomRoom.xMax - 2), Random.Range(randomRoom.y + 2, randomRoom.yMax - 2));
 
         // set player position
-        _setTile(pos, Tiles.player);
+        if(_getTile(pos) == Tiles.floor)
+            _setTile(pos, Tiles.player);
+    }
+
+    private void _addEnemies()
+    {
+        for (int i = 0; NumberOfEnemies > 0 && i < 1000; i++)
+        {
+            // Pick a random room
+            Rect randomRoom = _rooms[Random.Range(0, _rooms.Count)];
+            // Pick a random floor tile in the room, 2 tiles from the wall
+            Vector2 pos = new Vector2(Random.Range(randomRoom.x + 2, randomRoom.xMax - 2), Random.Range(randomRoom.y + 2, randomRoom.yMax - 2));
+
+            // set player position
+            if (_getTile(pos) == Tiles.floor)
+            {
+                _setTile(pos, Tiles.enemy);
+                NumberOfEnemies--;
+            }
+        }
     }
 
     private bool _noDoorsAround(int x, int y)

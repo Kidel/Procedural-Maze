@@ -13,10 +13,12 @@ public class MazeGeneratorBehaviour : MonoBehaviour
     public int ExtraConnectorChance = 20;
     public int WindingPercent = 0;
     public bool RemoveDeadEnds = true;
+    public int NumberOfEnemies = 10;
 
     public GameObject Wall;
     public GameObject Floor;
     public GameObject Door;
+    public GameObject Enemy;
 
     public GameObject Player;
 
@@ -28,7 +30,7 @@ public class MazeGeneratorBehaviour : MonoBehaviour
         if (StageHeight % 2 == 0)
             StageHeight++;
 
-        mz = new MazeGenerator(StageWidth, StageHeight, NumberRoomTries, RoomExtraSize, ExtraConnectorChance, WindingPercent, RemoveDeadEnds);
+        mz = new MazeGenerator(StageWidth, StageHeight, NumberRoomTries, RoomExtraSize, ExtraConnectorChance, WindingPercent, RemoveDeadEnds, NumberOfEnemies);
         maze = mz.Generate();
         mz.PrintDebug();
 
@@ -36,28 +38,45 @@ public class MazeGeneratorBehaviour : MonoBehaviour
         {
             for (int x = 0; x < maze.GetLength(0); ++x)
             {
-                GameObject whatToSpawn = new GameObject();
+                GameObject whatToSpawn = null;
+                bool spawn = false;
                 float size = Wall.transform.localScale.x;
                 bool spawnFloor = false;
                 if (maze[x, y] == Tiles.wall)
                 {
                     whatToSpawn = Wall;
+                    spawn = true;
                 }
                 else if (maze[x, y] == Tiles.floor)
                 {
                     whatToSpawn = Floor;
+                    spawn = true;
                 }
                 else if (maze[x, y] == Tiles.door)
                 {
                     whatToSpawn = Door;
+                    spawn = true;
+                }
+                else if (maze[x, y] == Tiles.enemy)
+                {
+                    whatToSpawn = Enemy;
+                    spawnFloor = true;
+                    spawn = true;
                 }
                 else if (maze[x, y] == Tiles.player)
                 {
                     whatToSpawn = Player;
                     spawnFloor = true;
+                    spawn = true;
                 }
-                Instantiate(whatToSpawn, new Vector3(x * size, !spawnFloor ? size * (-1) : 0, y * size), new Quaternion());
-                if (spawnFloor) Instantiate(Floor, new Vector3(x * size, size * (-1), y * size), new Quaternion());
+                else
+                {
+                    spawn = false;
+                    spawnFloor = false;
+                }
+
+                if (spawn) Instantiate(whatToSpawn, new Vector3(x * size, !spawnFloor ? size * (-1) : 0, y * size), new Quaternion());
+                if (spawn && spawnFloor) Instantiate(Floor, new Vector3(x * size, size * (-1), y * size), new Quaternion());
             }
         }
     }
