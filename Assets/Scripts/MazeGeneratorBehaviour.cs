@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Maze;
 
 public class MazeGeneratorBehaviour : MonoBehaviour
 {
